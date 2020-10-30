@@ -228,8 +228,9 @@ class ModulatedConv2d(nn.Module):
         self.demodulate = demodulate
 
     def __repr__(self):
-        return (
-            f'{self.__class__.__name__}({self.in_channel}, {self.out_channel}, {self.kernel_size}, '
+        repr_str = super(ModulatedConv2d, self).__repr__()
+        return (repr_str +
+            f'(in={self.in_channel}, out={self.out_channel}, ks={self.kernel_size}, '
             f'upsample={self.upsample}, downsample={self.downsample}, demodulate={self.demodulate})'
         )
 
