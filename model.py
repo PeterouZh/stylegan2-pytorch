@@ -10,6 +10,8 @@ from torch.autograd import Function
 
 from op import FusedLeakyReLU, fused_leaky_relu, upfirdn2d
 
+from template_lib.v2.config_cfgnode import global_cfg
+
 
 class PixelNorm(nn.Module):
     def __init__(self):
@@ -391,11 +393,12 @@ class Generator(nn.Module):
 
         self.style = nn.Sequential(*layers)
 
+        pre_channel_multiplier = global_cfg.generator.pre_channel_multiplier if 'generator' in global_cfg else 1
         self.channels = {
-            4: 512,
-            8: 512,
-            16: 512,
-            32: 512,
+            4: int(512 * pre_channel_multiplier),
+            8: int(512 * pre_channel_multiplier),
+            16: int(512 * pre_channel_multiplier),
+            32: int(512 * pre_channel_multiplier),
             64: 256 * channel_multiplier,
             128: 128 * channel_multiplier,
             256: 64 * channel_multiplier,
@@ -620,11 +623,13 @@ class Discriminator(nn.Module):
     def __init__(self, size, channel_multiplier=2, blur_kernel=[1, 3, 3, 1]):
         super().__init__()
 
+        pre_channel_multiplier = global_cfg.discriminator.pre_channel_multiplier if 'discriminator' in global_cfg \
+            else 1
         channels = {
-            4: 512,
-            8: 512,
-            16: 512,
-            32: 512,
+            4: int(512 * pre_channel_multiplier),
+            8: int(512 * pre_channel_multiplier),
+            16: int(512 * pre_channel_multiplier),
+            32: int(512 * pre_channel_multiplier),
             64: 256 * channel_multiplier,
             128: 128 * channel_multiplier,
             256: 64 * channel_multiplier,
